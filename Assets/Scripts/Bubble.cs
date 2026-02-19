@@ -5,10 +5,23 @@ public class Bubble : MonoBehaviour
 {
     static readonly HashSet<Bubble> Bubbles = new HashSet<Bubble>();
 
+    public BubbleDefinition MyDefinition { get; private set; }
+
+    public SpriteRenderer BubbleRenderer;
+
     public AnimationCurve ForcePerDistance;
     public Rigidbody2D MyRigidbody;
     public float ForceMultiplier = 3f;
     public float MassToAttractionForceMultiplier = 1f;
+
+    public void SetFromDefinition(BubbleDefinition myDefinition)
+    {
+        this.MyDefinition = myDefinition;
+        this.transform.localScale = Vector3.one * this.MyDefinition.StartingBubbleSize;
+        this.BubbleRenderer.color = this.MyDefinition.BubbleColor;
+        this.MyRigidbody.mass = this.MyDefinition.StartingBubbleSize * this.MyDefinition.MassPerSize;
+        this.name = this.MyDefinition.name;
+    }
 
     private void OnEnable()
     {

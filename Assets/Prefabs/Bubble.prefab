@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1aec762b9e209744a13fa98f19332a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BubbleRenderer: {fileID: 7345057076323955161}
   ForcePerDistance:
     serializedVersion: 2
     m_Curve:
@@ -218,3 +219,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   MyRigidbody: {fileID: 7253610077703493210}
   ForceMultiplier: 3
+  MassToAttractionForceMultiplier: 1
