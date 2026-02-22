@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58105d38b37980e4091f9539988ff0a8, type: 3}
+  m_Name: New Flat Drain Relationship
+  m_EditorClassIdentifier: 
+  DefinitionA: {fileID: 11400000, guid: dd709a2c70a0cff478d5d99181841a2b, type: 2}
+  DefinitionB: {fileID: 11400000, guid: 9d7d98041ecde0e4fac36b1b3dc79306, type: 2}
+  AmountThatAGivesBPerSecond: 1

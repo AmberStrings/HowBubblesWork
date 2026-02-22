@@ -6,9 +6,9 @@ using UnityEngine.InputSystem;
 
 public class Bubble : MonoBehaviour
 {
-    static readonly HashSet<Bubble> Bubbles = new HashSet<Bubble>();
+    public const float MINIMUMBUBBLESIZETOPOP = .001f;
 
-    public Dictionary<Bubble, LineRenderer> ManagedConnections { get; set; } = new Dictionary<Bubble, LineRenderer>();
+    static readonly HashSet<Bubble> Bubbles = new HashSet<Bubble>();
 
     public BubbleDefinition MyDefinition { get; private set; }
 
@@ -19,6 +19,8 @@ public class Bubble : MonoBehaviour
     public float ForceMultiplier = 3f;
     public float MassToAttractionForceMultiplier = 1f;
 
+    public float Size { get; private set; } = 1f;
+
     public bool IAmBeingDragged { get; private set; } = false;
 
     public LineRenderer MyBaseLineRenderer;
@@ -28,6 +30,7 @@ public class Bubble : MonoBehaviour
         this.MyDefinition = myDefinition;
         this.transform.localScale = Vector3.one * this.MyDefinition.StartingBubbleSize;
         this.BubbleRenderer.color = this.MyDefinition.BubbleColor;
+        this.Size = MyDefinition.StartingBubbleSize;
         this.MyRigidbody.mass = this.MyDefinition.StartingBubbleSize * this.MyDefinition.MassPerSize;
         this.name = this.MyDefinition.name;
 
@@ -46,6 +49,12 @@ public class Bubble : MonoBehaviour
 
     private void Update()
     {
+        if (this.Size <= MINIMUMBUBBLESIZETOPOP)
+        {
+            this.Pop();
+            return;
+        }
+
         Vector3 myPosition = this.transform.position;
 
         if (this.IAmBeingDragged)
@@ -58,12 +67,6 @@ public class Bubble : MonoBehaviour
             {
                 this.MyBaseLineRenderer.SetPositions(new Vector3[] { myPosition, Camera.main.ScreenToWorldPoint(Mouse.current.position.value) });
             }
-        }
-
-        foreach (Bubble connections in this.ManagedConnections.Keys)
-        {
-            LineRenderer connectedRenderer = this.ManagedConnections[connections];
-            connectedRenderer.SetPositions(new Vector3[] { myPosition, connections.transform.position });
         }
     }
 
@@ -112,8 +115,26 @@ public class Bubble : MonoBehaviour
             return;
         }
 
-        LineRenderer newRenderer = Instantiate(this.MyBaseLineRenderer);
-        newRenderer.gameObject.SetActive(true);
-        ManagedConnections.Add(foundBubble, newRenderer);
+        BubbleRelationshipManager.Instance.AddRelationship(this, foundBubble);
+    }
+
+    public void ModifyMass(float amount)
+    {
+        if (this.transform.localScale.x <= amount)
+        {
+            // TODO: This should die!
+            return;
+        }
+
+        float newScaleUnclamped = this.transform.localScale.x + amount;
+        this.Size = newScaleUnclamped;
+        this.transform.localScale = Vector3.one * newScaleUnclamped;
+        this.MyRigidbody.mass = this.MyDefinition.MassPerSize * newScaleUnclamped;
+    }
+
+    public void Pop()
+    {
+        BubbleRelationshipManager.Instance.OnBubblePop(this);
+        Destroy(this.gameObject);
     }
 }
