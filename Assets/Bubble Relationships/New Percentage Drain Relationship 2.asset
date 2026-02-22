@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 794a64b19232c5f41829666a86192ad3, type: 3}
+  m_Name: New Percentage Drain Relationship 2
+  m_EditorClassIdentifier: 
+  DefinitionA: {fileID: 11400000, guid: 549c2644690759c4eaecf5b6637e061d, type: 2}
+  DefinitionB: {fileID: 11400000, guid: 452677fc48f453747b9fc0967ca72a58, type: 2}
+  ResourceTypeToTransfer: 1
+  PercentageAmountAGivesPerSecond: 0.01
+  HighestAmountAWillGivePerSecond: 0.01

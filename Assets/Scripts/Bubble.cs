@@ -1,11 +1,18 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Bubble : MonoBehaviour
 {
+    public enum ResourceTypeTarget
+    {
+        Resources,
+        Capital,
+    }
+
     public const float MINIMUMBUBBLESIZETOPOP = .001f;
 
     static readonly HashSet<Bubble> Bubbles = new HashSet<Bubble>();
@@ -19,22 +26,36 @@ public class Bubble : MonoBehaviour
     public float ForceMultiplier = 3f;
     public float MassToAttractionForceMultiplier = 1f;
 
-    public float Size { get; private set; } = 1f;
+    public float Size
+    {
+        get
+        {
+            return this.Resources + this.Capital;
+        }
+    }
+
+    public float Resources { get; private set; } = 1f;
+    public float Capital { get; private set; } = 1f;
+
 
     public bool IAmBeingDragged { get; private set; } = false;
 
     public LineRenderer MyBaseLineRenderer;
 
+    public TMP_Text ValuesLabel;
+
     public void SetFromDefinition(BubbleDefinition myDefinition)
     {
         this.MyDefinition = myDefinition;
-        this.transform.localScale = Vector3.one * this.MyDefinition.StartingBubbleSize;
+        this.BubbleRenderer.transform.localScale = Vector3.one * this.MyDefinition.StartingBubbleSize;
         this.BubbleRenderer.color = this.MyDefinition.BubbleColor;
-        this.Size = MyDefinition.StartingBubbleSize;
+
         this.MyRigidbody.mass = this.MyDefinition.StartingBubbleSize * this.MyDefinition.MassPerSize;
         this.name = this.MyDefinition.name;
 
         this.MyBaseLineRenderer.gameObject.SetActive(false);
+
+        this.SetResourcesAndCapital(MyDefinition.StartingBubbleSize, MyDefinition.StartingBubbleSize);
     }
 
     private void OnEnable()
@@ -118,23 +139,47 @@ public class Bubble : MonoBehaviour
         BubbleRelationshipManager.Instance.AddRelationship(this, foundBubble);
     }
 
-    public void ModifyMass(float amount)
-    {
-        if (this.transform.localScale.x <= amount)
-        {
-            // TODO: This should die!
-            return;
-        }
-
-        float newScaleUnclamped = this.transform.localScale.x + amount;
-        this.Size = newScaleUnclamped;
-        this.transform.localScale = Vector3.one * newScaleUnclamped;
-        this.MyRigidbody.mass = this.MyDefinition.MassPerSize * newScaleUnclamped;
-    }
-
     public void Pop()
     {
         BubbleRelationshipManager.Instance.OnBubblePop(this);
+        Destroy(this.MyBaseLineRenderer.gameObject);
         Destroy(this.gameObject);
+    }
+
+    public void SetResourcesAndCapital(float resourceValue, float capitalValue)
+    {
+        this.Resources = resourceValue;
+        this.Capital = capitalValue;
+
+        this.BubbleRenderer.transform.localScale = Vector3.one * this.Size;
+        this.ValuesLabel.text = $"{resourceValue.ToString("F2")}C\n{capitalValue.ToString("F2")}R";
+    }
+
+    public void ModifyResource(ResourceTypeTarget type, float byAmount)
+    {
+        switch (type)
+        {
+            default:
+            case ResourceTypeTarget.Resources:
+                this.Resources = this.Resources + byAmount;
+                break;
+            case ResourceTypeTarget.Capital:
+                this.Capital = this.Capital + byAmount;
+                break;
+        }
+
+        this.SetResourcesAndCapital(this.Resources, this.Capital);
+    }
+
+    public float GetResource(ResourceTypeTarget type)
+    {
+        switch (type)
+        {
+            default:
+            case ResourceTypeTarget.Resources:
+                return this.Resources;
+            case ResourceTypeTarget.Capital:
+                return this.Capital;
+        }
     }
 }

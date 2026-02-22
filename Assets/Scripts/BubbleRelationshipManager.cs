@@ -67,8 +67,8 @@ public class BubbleRelationshipManager : MonoBehaviour
             if (thisLink.Bubbles.Contains(poppingBubble))
             {
                 Destroy(thisLink.MyLineRenderer.gameObject);
+                this.ActiveLinks.RemoveAt(ii);
             }
-            this.ActiveLinks.RemoveAt(ii);
         }
     }
 }
