@@ -54,7 +54,10 @@ public class BubbleRelationshipManager : MonoBehaviour
         {
             foreach (BubbleRelationshipInstance relationships in link.RelationshipInstances)
             {
-                relationships.BubbleRelationDefinition.ExecuteRelationship(relationships.BubbleA, relationships.BubbleB, time);
+                if (relationships.BubbleRelationDefinition.ShouldApply(relationships.BubbleA, relationships.BubbleB))
+                {
+                    relationships.BubbleRelationDefinition.ExecuteRelationship(relationships.BubbleA, relationships.BubbleB, time);
+                }
             }
         }
     }

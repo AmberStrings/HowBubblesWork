@@ -16,12 +16,15 @@ MonoBehaviour:
   MassPerSize: 100
   ResourceAmounts:
   - OfResourceKind: {fileID: 11400000, guid: 0ded0c9774206b64d9afe034501c4c8d, type: 2}
-    AmountOfResource: 10
+    AmountOfResource: 5.5
     AmountOfCapital: 10
+    Instant: 0
   - OfResourceKind: {fileID: 11400000, guid: 8b9f4fc846c90ab40a8f94e6aea9b8dc, type: 2}
     AmountOfResource: 10
     AmountOfCapital: 0
+    Instant: 0
   SelfAffectingTransactions:
   - OfResourceKind: {fileID: 11400000, guid: 0ded0c9774206b64d9afe034501c4c8d, type: 2}
     AmountOfResource: -0.1
     AmountOfCapital: 0
+    Instant: 0

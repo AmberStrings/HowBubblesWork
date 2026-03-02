@@ -14,11 +14,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefinitionA: {fileID: 11400000, guid: 9d7d98041ecde0e4fac36b1b3dc79306, type: 2}
   DefinitionB: {fileID: 11400000, guid: 452677fc48f453747b9fc0967ca72a58, type: 2}
+  Conditions:
+  - ConditionOperator: 0
+    Amount:
+      OfResourceKind: {fileID: 11400000, guid: 0ded0c9774206b64d9afe034501c4c8d, type: 2}
+      AmountOfResource: 5
+      AmountOfCapital: 0
+      Instant: 0
   ResourceChangeAmountForBubbleA:
-  - OfResourceKind: {fileID: 0}
-    AmountOfResource: 0
-    AmountOfCapital: 0
+  - OfResourceKind: {fileID: 11400000, guid: 0ded0c9774206b64d9afe034501c4c8d, type: 2}
+    AmountOfResource: 1
+    AmountOfCapital: -1
+    Instant: 1
   ResourceChangeAmountForBubbleB:
-  - OfResourceKind: {fileID: 0}
-    AmountOfResource: 0
-    AmountOfCapital: 0
+  - OfResourceKind: {fileID: 11400000, guid: 0ded0c9774206b64d9afe034501c4c8d, type: 2}
+    AmountOfResource: -1
+    AmountOfCapital: 1
+    Instant: 1
