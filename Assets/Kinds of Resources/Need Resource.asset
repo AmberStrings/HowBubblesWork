@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8f912ce6f70fa241bd0c6bef4459939, type: 3}
-  m_Name: Capitol Bubble
+  m_Script: {fileID: 11500000, guid: baac9feae0e910f449170f090332fd16, type: 3}
+  m_Name: Need Resource
   m_EditorClassIdentifier: 
-  BubbleColor: {r: 0.3301887, g: 0.29436633, b: 0.30608702, a: 1}
-  StartingBubbleSize: 1
-  MassPerSize: 1
+  ResourceName: Need

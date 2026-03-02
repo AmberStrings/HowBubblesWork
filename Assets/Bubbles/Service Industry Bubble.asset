@@ -10,8 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8f912ce6f70fa241bd0c6bef4459939, type: 3}
-  m_Name: Service Bubble
+  m_Name: Service Industry Bubble
   m_EditorClassIdentifier: 
   BubbleColor: {r: 0.6603774, g: 0.41469344, b: 0.19001423, a: 1}
-  StartingBubbleSize: 1
-  MassPerSize: 1
+  MassPerSize: 100
+  ResourceAmounts:
+  - OfResourceKind: {fileID: 11400000, guid: 0ded0c9774206b64d9afe034501c4c8d, type: 2}
+    AmountOfResource: 100
+    AmountOfCapital: 100
+  - OfResourceKind: {fileID: 11400000, guid: 8b9f4fc846c90ab40a8f94e6aea9b8dc, type: 2}
+    AmountOfResource: 100
+    AmountOfCapital: 0

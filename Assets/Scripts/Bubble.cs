@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -26,16 +27,21 @@ public class Bubble : MonoBehaviour
     public float ForceMultiplier = 3f;
     public float MassToAttractionForceMultiplier = 1f;
 
+    public double CapitalAmount;
+    public Dictionary<ResourceKind, double> ResourceToAmount = new Dictionary<ResourceKind, double>();
+
     public float Size
     {
         get
         {
-            return this.Resources + this.Capital;
+            double total = this.CapitalAmount;
+            foreach (ResourceKind kind in this.ResourceToAmount.Keys)
+            {
+                total += this.ResourceToAmount[kind];
+            }
+            return (float)total;
         }
     }
-
-    public float Resources { get; private set; } = 1f;
-    public float Capital { get; private set; } = 1f;
 
 
     public bool IAmBeingDragged { get; private set; } = false;
@@ -46,16 +52,22 @@ public class Bubble : MonoBehaviour
 
     public void SetFromDefinition(BubbleDefinition myDefinition)
     {
+        foreach (ResourceAmount amount in myDefinition.ResourceAmounts)
+        {
+            this.ResourceToAmount.Add(amount.OfResourceKind, amount.AmountOfResource);
+            this.CapitalAmount += amount.AmountOfCapital;
+        }
+
         this.MyDefinition = myDefinition;
-        this.BubbleRenderer.transform.localScale = Vector3.one * this.MyDefinition.StartingBubbleSize;
+        float mass = this.GetMass();
+        this.BubbleRenderer.transform.localScale = Vector3.one * (mass / (float)this.MyDefinition.MassPerSize);
         this.BubbleRenderer.color = this.MyDefinition.BubbleColor;
 
-        this.MyRigidbody.mass = this.MyDefinition.StartingBubbleSize * this.MyDefinition.MassPerSize;
+        this.MyRigidbody.mass = mass;
         this.name = this.MyDefinition.name;
 
         this.MyBaseLineRenderer.gameObject.SetActive(false);
-
-        this.SetResourcesAndCapital(MyDefinition.StartingBubbleSize, MyDefinition.StartingBubbleSize);
+        this.UpdateLabel();
     }
 
     private void OnEnable()
@@ -74,6 +86,19 @@ public class Bubble : MonoBehaviour
         {
             this.Pop();
             return;
+        }
+        double time = Time.deltaTime;
+
+        foreach (ResourceAmount amount in this.MyDefinition.SelfAffectingTransactions)
+        {
+            if (amount.AmountOfCapital != 0)
+            {
+                this.ModifyCapital(amount.AmountOfCapital * time);
+            }
+            if (amount.OfResourceKind != null)
+            {
+                this.ModifyResource(amount.OfResourceKind, amount.AmountOfResource * time);
+            }
         }
 
         Vector3 myPosition = this.transform.position;
@@ -146,40 +171,74 @@ public class Bubble : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public void SetResourcesAndCapital(float resourceValue, float capitalValue)
+    public void SetResourcesAndCapital(Dictionary<ResourceKind, double> resourceValues, double capitalValue)
     {
-        this.Resources = resourceValue;
-        this.Capital = capitalValue;
+        this.ResourceToAmount = resourceValues;
+        this.CapitalAmount = capitalValue;
 
         this.BubbleRenderer.transform.localScale = Vector3.one * this.Size;
-        this.ValuesLabel.text = $"{resourceValue.ToString("F2")}C\n{capitalValue.ToString("F2")}R";
+        this.UpdateLabel();
     }
 
-    public void ModifyResource(ResourceTypeTarget type, float byAmount)
+    public void ModifyCapital(double byAmount)
     {
-        switch (type)
-        {
-            default:
-            case ResourceTypeTarget.Resources:
-                this.Resources = this.Resources + byAmount;
-                break;
-            case ResourceTypeTarget.Capital:
-                this.Capital = this.Capital + byAmount;
-                break;
-        }
-
-        this.SetResourcesAndCapital(this.Resources, this.Capital);
+        this.CapitalAmount = Math.Max(this.CapitalAmount + byAmount, 0);
+        float mass = this.GetMass();
+        this.BubbleRenderer.transform.localScale = Vector3.one * (mass / (float)this.MyDefinition.MassPerSize);
     }
 
-    public float GetResource(ResourceTypeTarget type)
+    public void ModifyResource(ResourceKind type, double byAmount)
     {
-        switch (type)
+        if (this.ResourceToAmount.TryGetValue(type, out double existingAmount))
         {
-            default:
-            case ResourceTypeTarget.Resources:
-                return this.Resources;
-            case ResourceTypeTarget.Capital:
-                return this.Capital;
+            this.ResourceToAmount[type] = existingAmount + byAmount;
         }
+        else
+        {
+            this.ResourceToAmount.Add(type, byAmount);
+        }
+
+        float mass = this.GetMass();
+        this.BubbleRenderer.transform.localScale = Vector3.one * (mass / (float)this.MyDefinition.MassPerSize);
+        this.UpdateLabel();
+    }
+
+    public double GetResource(ResourceKind type)
+    {
+        if (this.ResourceToAmount.TryGetValue(type, out double value))
+        {
+            return value;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public void UpdateLabel()
+    {
+        this.ValuesLabel.text = $"{this.CapitalAmount.ToString("F2")}C\n{this.GetResourcesLabel()}";
+    }
+
+    public string GetResourcesLabel()
+    {
+        StringBuilder resourcesLabel = new StringBuilder();
+
+        foreach (ResourceKind kind in this.ResourceToAmount.Keys)
+        {
+            resourcesLabel.AppendLine($"[{kind.ResourceName} = {this.ResourceToAmount[kind].ToString("F2")}]");
+        }
+
+        return resourcesLabel.ToString();
+    }
+
+    public float GetMass()
+    {
+        double mass = this.CapitalAmount;
+        foreach (ResourceKind kind in this.ResourceToAmount.Keys)
+        {
+            mass += this.ResourceToAmount[kind];
+        }
+        return (float)mass;
     }
 }

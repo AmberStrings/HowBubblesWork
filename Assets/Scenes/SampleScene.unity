@@ -406,11 +406,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BubblePF: {fileID: 876670886560165022, guid: 29e1c1725731db445b648376e4250e42, type: 3}
   DefinitionsToSpawn:
-  - {fileID: 11400000, guid: dd709a2c70a0cff478d5d99181841a2b, type: 2}
-  - {fileID: 11400000, guid: 9d7d98041ecde0e4fac36b1b3dc79306, type: 2}
-  - {fileID: 11400000, guid: 549c2644690759c4eaecf5b6637e061d, type: 2}
-  - {fileID: 11400000, guid: bb47d4a748a8c604a83f7dfcf9715e96, type: 2}
   - {fileID: 11400000, guid: 452677fc48f453747b9fc0967ca72a58, type: 2}
+  - {fileID: 11400000, guid: 9d7d98041ecde0e4fac36b1b3dc79306, type: 2}
   DistanceFromCenterToSpawnMax: 4
 --- !u!4 &329693492
 Transform:
@@ -1739,12 +1736,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LineRendererPF: {fileID: 5121566537689032288, guid: 5a587b7916013524f8585438848faea9, type: 3}
-  BubbleRelationshipDefinitions:
-  - {fileID: 11400000, guid: a9183f30db8f8f842b9e621e55488809, type: 2}
-  - {fileID: 11400000, guid: 2f32ec28f21a9c0409cff6ba11c99ebe, type: 2}
-  - {fileID: 11400000, guid: 6869aadd85ae44d4e9a86af07f39a05e, type: 2}
-  - {fileID: 11400000, guid: 786e5101c8dc14b49997cc26c022d195, type: 2}
-  - {fileID: 11400000, guid: f471ba5ddeded7045a3230af7cfc4ccd, type: 2}
+  BubbleRelationshipDefinitions: []
 --- !u!4 &1210632878
 Transform:
   m_ObjectHideFlags: 0

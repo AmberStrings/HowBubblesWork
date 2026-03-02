@@ -4,15 +4,15 @@ using static Bubble;
 [CreateAssetMenu(fileName = "New Percentage Drain Relationship.asset", menuName = "Bubble Relationships/New Percentage Drain Relationship", order = 0)]
 public class PercentageDrainRelationshipDefinition : BubbleRelationshipDefinition
 {
-    public ResourceTypeTarget ResourceTypeToTransfer;
-    public float PercentageAmountAGivesPerSecond;
-    public float HighestAmountAWillGivePerSecond;
+    public ResourceKind ResourceKindToTransfer;
+    public double PercentageAmountAGivesPerSecond;
+    public double HighestAmountAWillGivePerSecond;
 
-    public override void ExecuteRelationship(Bubble bubbleA, Bubble bubbleB, float time)
+    public override void ExecuteRelationship(Bubble bubbleA, Bubble bubbleB, double time)
     {
-        float currentResourceCount = bubbleA.GetResource(this.ResourceTypeToTransfer);
-        float amountToDrain = Mathf.Min(currentResourceCount, this.HighestAmountAWillGivePerSecond * time, this.PercentageAmountAGivesPerSecond * time * currentResourceCount);
-        bubbleA.ModifyResource(this.ResourceTypeToTransfer, -amountToDrain);
-        bubbleB.ModifyResource(this.ResourceTypeToTransfer, amountToDrain);
+        double currentResourceCount = bubbleA.GetResource(this.ResourceKindToTransfer);
+        double amountToDrain = (double)Mathf.Min((float)currentResourceCount, (float)this.HighestAmountAWillGivePerSecond * (float)time, (float)this.PercentageAmountAGivesPerSecond * (float)time * (float)currentResourceCount);
+        bubbleA.ModifyResource(this.ResourceKindToTransfer, -amountToDrain);
+        bubbleB.ModifyResource(this.ResourceKindToTransfer, amountToDrain);
     }
 }
